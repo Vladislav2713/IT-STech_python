@@ -6,7 +6,7 @@ from aiogram.types import Message
 from dotenv import load_dotenv
 
 load_dotenv()
-bot = Bot(token=os.getenv('7824081044:AAEFACJWhCVPjIFYwNG_-llm953o_EX5eU4'))
+bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher()
 
 @dp.message(Command("start"))
