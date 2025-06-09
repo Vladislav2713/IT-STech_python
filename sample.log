@@ -1,0 +1,4 @@
+2023-01-01 10:00: INFO Starting system
+2023-01-01 10:01: ERROR Failed to connect
+2023-01-01 10:02: INFO Processing data
+2023-01-01 10:03: ERROR Invalid input
