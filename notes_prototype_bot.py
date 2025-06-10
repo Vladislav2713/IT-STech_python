@@ -27,14 +27,21 @@ async def start_command(message: Message):
 @dp.message(Command("addnote"))
 async def add_note(message: Message):
     user_id = message.from_user.id
-    note = message.get_args().strip()
+    args = message.text.split(maxsplit=1)
+    note = args[1].strip() if len(args) > 1 else ""
+    
     if not note:
-        return await message.reply("Укажи текст заметки!")
+        return await message.answer("❌ Укажи текст заметки!")
+    
     date = datetime.now().strftime("%Y-%m-%d")
-    c = conn.cursor()
-    c.execute("INSERT INTO notes VALUES (?, ?, ?)", (user_id, note, date))
-    conn.commit()
-    await message.reply("Заметка добавлена!")
+    
+    try:
+        with conn:
+            cur = conn.cursor()
+            cur.execute("INSERT INTO notes VALUES (?, ?, ?)", (user_id, note, date))
+        await message.answer("✅ Заметка добавлена!")
+    except Exception as e:
+        await message.answer(f"⚠️ Ошибка: {str(e)}")
 
 @dp.message(Command("listnotes"))
 async def list_notes(message: Message):
