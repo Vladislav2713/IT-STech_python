@@ -1,1 +1,1 @@
-worker: python weather_deploy_bot.py
+worker: python notes_prototype_bot.py
