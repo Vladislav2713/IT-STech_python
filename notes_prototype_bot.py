@@ -12,7 +12,7 @@ bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher()
 
 def init_db():
-    conn = sqlite3.connect('/opt/render/notes.db')
+    conn = sqlite3.connect(':memory:')
     c = conn.cursor()
     c.execute("CREATE TABLE IF NOT EXISTS notes (user_id INTEGER, note TEXT, date TEXT)")
     conn.commit()
