@@ -26,31 +26,38 @@ async def get_weather(lat: float, lon: float) -> dict:
 
 @dp.message(Command("start"))
 async def start_command(message: Message):
-    await message.reply("Укажи город: /weather <город>")
+    await message.answer("Укажи город: /weather <город>")
 
 @dp.message(Command("weather"))
 async def get_weather_command(message: Message):
-    city = message.get_args().strip()
+    args = message.text.split(maxsplit=1)
+    city = args[1].strip() if len(args) > 1 else ""
+    
     if not city:
-        return await message.reply("Укажи город!")
+        return await message.answer("❌ Укажи город!")
+    
     try:
         coords = await get_coordinates(city)
         if not coords:
-            return await message.reply("Город не найден!")
+            return await message.answer("🚫 Город не найден!")
+        
         weather_data = await get_weather(*coords)
         current = weather_data['current']
+        
         weather_codes = {
-            0: "Ясно", 1: "Преимущественно ясно", 2: "Переменная облачность",
-            3: "Пасмурно", 45: "Туман", 48: "Инейный туман"
+            0: "Ясно", 1: "Преимущественно ясно", 
+            2: "Переменная облачность", 3: "Пасмурно",
+            45: "Туман", 48: "Инейный туман"
         }
+        
         desc = weather_codes.get(current['weather_code'], "Неизвестно")
-        await message.reply(
-            f"Погода в {city}:\n"
-            f"Температура: {current['temperature_2m']}°C\n"
-            f"Состояние: {desc}"
+        await message.answer(
+            f"🌤 Погода в {city}:\n"
+            f"🌡 Температура: {current['temperature_2m']}°C\n"
+            f"☁️ Состояние: {desc}"
         )
     except Exception as e:
-        await message.reply(f"Ошибка: {str(e)}")
+        await message.answer(f"⚠️ Ошибка: {str(e)}")
 
 async def main():
     await dp.start_polling(bot)
